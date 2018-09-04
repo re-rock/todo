@@ -3,14 +3,103 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta mlns:th=viewport> content="width=device-width,initial-scale=1, shrink-to-fit=no">
-    <meta name=description content="APP DESCRIPTION">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="spring boot example (todo)">
     <meta name="author" content="y.kobayashi">
     <title>SpringBoot App</title>
     <link rel="stylesheet" href="./css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.1.0/css/bootstrap.min.css}" />
 </head>
 <body>
-
+    <div class="container">
+        <div class="header clearfix">
+            <h3 class="text-muted">Spring Boot Todo App</h3>
+        </div>
+        <div class="jumbtron">
+            <h1>登録フォーム</h1>
+            <!-- 新規の場合 -->
+            <form method="POST" action="./tasks.html" th:if="${form.isNewTask}" th:action="@{/tasks}">
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="input-text-subject">タスク</label>
+                        <input class="form-control" required="required" type="text" placeholder="やること" 
+                            th:field="${form.subject}" id="input-text-subject" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="input-date-deadline">期限</label>
+                        <input class="form-control" required="required" type="date"
+                            th:field="${form.deadLine}" id="input-date-deadline" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                       <input class="form-check-input" type="checkbox" 
+                        th:filed="${form.hasDone}" id="gridCheck" />
+                        <label class="form-check-label" for="gridCheck">完了チェック</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">登録</button>
+            </form>
+            <!-- 更新の場合 -->
+            <form method="POST" action="./tasks.html" th:unless="${form.isNewTask}"
+                th:action="@{/tasks/{id}(id=${taskId})}">
+                <input name="_method" type="hidden" value="PUT">
+                <div class="form-row">
+                    <div class="form-group col-md-8">
+                        <label for="input-text-subject">タスク</label>
+                        <input class="form-control" required="required" type="text" placeholder="やること"
+                            th:field="${form.subject}" id="input-text-subject" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="input-date-deadline">期限</label>
+                        <input class="form-control" required="required" type="date"
+                            th:field="${form-deadLine}" id="input-date-deadline" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox"
+                            th:field="${form.hasDone}" id="gridCheck">
+                        <label type="form-ckeck-label" for="gridCheck">完了チェック</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">更新</button>
+                <a type="button" class="btn btn-warning" href="./tasks.html" th:href="@{/tasks}">クリア</a>
+            </form>
+        </div>
+        <hr />
+        <h2>タスク一覧</h2>
+        <div class="table-response">
+            <!-- タスク一覧 -->
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th scope="col">タスク名</th>
+                        <th scope="col">期限</th>
+                        <th colspan="2">編集</th>
+                    </tr>
+                </thead>
+                <tbody th:remove="all-but-first">
+                    <tr th:each="task: ${tasks}" th:class="${task.hasDone}? 'table-dark'">
+                        <td th:text="${task.subject}">原稿の締切</td>
+                        <td th:text="${task.deadLine}">2018-09-04</td>
+                        <td>
+                            <a type="button" class="btn" 
+                                th:classappend="${task.hasDone} ? 'btn-light': 'btn-success'" 
+                                href="./tasks.html" th:fref="@{/tasks/{id}(id=${task.id})}">編集
+                            </a>
+                        </td>
+                        <td>
+                            <form method="POST" action="./tasks.html" th:action="@{/tasks/{id}(id=${task.id})}">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                <input type="submit" class="btn" 
+                                    th:classappend="${task.hasDone}"? 'btn-light':'btn-danger' value="削除" />
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 <script th:src="@{/webjars/jquery/3.0.0/jquery.min.js}" src="./js/vendor/jquery-slim.mim.js"></script>
 <script th:src="@{/webjars/popper.js/1.14.1/popper.min.js}" src="./js/vendor/popper.mim.js"></script>
 <script th:src="@{/webjars/bootstrap/4.1.0/js/bootstrap.mim.js}" src="./js/bootstrap.min.js"></script>
