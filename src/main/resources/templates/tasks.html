@@ -52,7 +52,7 @@
                     <div class="form-group col-md-4">
                         <label for="input-date-deadline">期限</label>
                         <input class="form-control" required="required" type="date"
-                            th:field="${form-deadLine}" id="input-date-deadline" />
+                            th:field="${form.deadLine}" id="input-date-deadline" />
                     </div>
                 </div>
                 <div class="form-group">
@@ -83,10 +83,10 @@
                         <td th:text="${task.subject}">原稿の締切</td>
                         <td th:text="${task.deadLine}">2018-09-04</td>
                         <td>
-                            <a type="button" class="btn" 
-                                th:classappend="${task.hasDone} ? 'btn-light': 'btn-success'" 
-                                href="./tasks.html" th:fref="@{/tasks/{id}(id=${task.id})}">編集
-                            </a>
+                            <a type="button" class="btn"
+                                th:classappend="${task.hasDone} ? 'btn-light' :'btn-success'"
+                                href="./tasks.html" th:href="@{/tasks/{id}(id=${task.id})}">編集
+                             </a>
                         </td>
                         <td>
                             <form method="POST" action="./tasks.html" th:action="@{/tasks/{id}(id=${task.id})}">
